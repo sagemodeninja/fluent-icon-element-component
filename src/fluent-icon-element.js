@@ -1509,6 +1509,7 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
                 const style = this.iconSpan.style;
 
                 style.fontSize = pixelSize;
+                style.lineHeight = pixelSize;
                 style.height = pixelSize;
                 style.width = pixelSize;
 
