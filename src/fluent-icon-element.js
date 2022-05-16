@@ -1,4 +1,4 @@
-const segoeFluentIconsSymbolToGlyphMap = [
+const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
     { name: "GlobalNavButton", glyph: "e700" },
     { name: "Wifi", glyph: "e701" },
     { name: "Bluetooth", glyph: "e702" },
@@ -1410,12 +1410,14 @@ const segoeFluentIconsSymbolToGlyphMap = [
     template.innerHTML = `
     <style>
         :host {
-            display: inline-block; }
+            display: inline-block;
+        }
 
         .icon {
             display: block;
             font-size: 16px;
-            text-rendering: optimizeLegibility; }
+            text-rendering: optimizeLegibility;
+        }
     </style>
     <span class="icon"></span>
     `;
@@ -1425,63 +1427,79 @@ const segoeFluentIconsSymbolToGlyphMap = [
             super();
 
             this.attachShadow({ mode: "open" });
-            this.shadowRoot.appendChild(template.content.cloneNode(true)); }
+            this.shadowRoot.appendChild(template.content.cloneNode(true));
+        }
 
         static get observedAttributes() {
-            return ["font-family", "glyph", "font-size", "foreground"]; }
+            return ["font-family", "glyph", "font-size", "foreground"];
+        }
 
         /* Attributes. */
         get fontFamily() {
-            return this.getAttribute("font-family") ?? "Segoe Fluent Icons"; }
+            return this.getAttribute("font-family") ?? "Segoe Fluent Icons";
+        }
 
         set fontFamily(value) {
             this.setAttribute("font-family", value);
-            this.setFontFamily(); }
+            this.setFontFamily();
+        }
 
         get glyph() {
-            return this.getAttribute("glyph"); }
+            return this.getAttribute("glyph");
+        }
 
         set glyph(value) {
             this.setAttribute("glyph", value);
-            this.setGlyph(); }
+            this.setGlyph();
+        }
 
         get fontSize() {
-            return this.getAttribute("font-size") ?? 16; }
+            return this.getAttribute("font-size") ?? 16;
+        }
 
         set fontSize(value) {
             this.setAttribute("font-size", value);
-            this.setFontSize(); }
+            this.setFontSize();
+        }
 
         get foreground() {
-            return this.getAttribute("foreground"); }
+            return this.getAttribute("foreground");
+        }
 
         set foreground(value) {
             this.setAttribute("foreground", value);
-            this.setForeground(); }
+            this.setForeground();
+        }
 
         /* DOM */
         get iconSpan() {
             this._iconSpan ??= this.shadowRoot.querySelector(".icon");
-            return this._iconSpan; }
+            return this._iconSpan;
+        }
 
         /* Functions */
         connectedCallback() {
             this.setFontFamily();
             this.setGlyph();
-            this.setFontSize(); }
+            this.setFontSize();
+        }
 
         attributeChangedCallback(name, oldValue, newValue) {
             switch(name){
                 case "font-family": this.setFontFamily(); break;
                 case "glyph": this.setGlyph(); break;
                 case "font-size": this.setFontSize(); break;
-                case "foreground": this.setForeground(); break; } }
+                case "foreground": this.setForeground(); break;
+            }
+        }
 
         setFontFamily() {
-            this.iconSpan.style.fontFamily = this.fontFamily + ", sans-serif"; }
+            this.iconSpan.style.fontFamily = this.fontFamily + ", sans-serif";
+        }
 
         setGlyph() {
-            this.iconSpan.innerHTML = this.glyph; }
+            this.iconSpan.innerHTML = this.glyph;
+        }
 
         setFontSize() {
             if(this.fontSize !== null)
@@ -1495,38 +1513,161 @@ const segoeFluentIconsSymbolToGlyphMap = [
                 style.width = pixelSize;
 
                 thisStyle.height = pixelSize;
-                thisStyle.width = pixelSize; } }
+                thisStyle.width = pixelSize;
+            }
+        }
 
         setForeground() {
             if(this.foreground !== null)
-                this.iconSpan.style.color = this.foreground; } }
+                this.iconSpan.style.color = this.foreground; 
+        }
+    }
 
     class FluentSymbolIcon extends FluentFontIcon {
         constructor() {
-            super(); }
+            super();
+        }
 
         static get observedAttributes() {
-            return ["font-family", "glyph", "font-size", "foreground", "symbol"]; }
+            return ["font-family", "glyph", "font-size", "foreground", "symbol"];
+        }
 
         /* Attributes. */
         get symbol() {
-            return this.getAttribute("symbol"); }
+            return this.getAttribute("symbol");
+        }
 
         set symbol(value) {
             this.setAttribute("symbol", value);
-            this.setSymbol(); }
+            this.setSymbol();
+        }
+
+        get glyphMap() {
+            return this._glyphMap ?? SEGOE_FLUENT_ICONS_GLYPH_MAP;
+        }
+
+        set glyphMap(value) {
+            this._glyphMap = value;
+            this.setSymbol();
+        }
 
         /* Functions */
         attributeChangedCallback(name, oldValue, newValue) {
             super.attributeChangedCallback(name, oldValue, newValue);
 
             switch(name) {
-                case "symbol": this.setSymbol(); break; } }
+                case "symbol": this.setSymbol(); break;
+            }
+        }
 
         setSymbol() {
-            const glyph = segoeFluentIconsSymbolToGlyphMap.find(map => map.name === this.symbol).glyph;
-            super.glyph = "&#x" + glyph; } }
+            const glyph = this.glyphMap.find(map => map.name === this.symbol).glyph;
+            super.glyph = "&#x" + glyph;
+        }
+    }
 
     customElements.define("fluent-font-icon", FluentFontIcon);
     customElements.define("fluent-symbol-icon", FluentSymbolIcon);
+})();
+
+(function() {
+    const template = document.createElement("template");
+    template.innerHTML = `
+    <style>
+        :host {
+            display: inline-block;
+        }
+
+        .image {
+            display: block;
+        }
+    </style>
+    <img class="image" />
+    `;
+
+    class FluentImageIcon extends HTMLElement {
+        constructor() {
+            super();
+
+            this.attachShadow({ mode: "open" });
+            this.shadowRoot.appendChild(template.content.cloneNode(true));
+        }
+
+        static get observedAttributes() {
+            return ["source", "size", "alt", "title"];
+        }
+
+        /* Attributes */
+        get source() {
+            return this.getAttribute("source");
+        }
+
+        set source(value) {
+            this.setAttribute("source", value);
+        }
+        
+        get size() {
+            return this.getAttribute("size") ?? 16;
+        }
+
+        set size(value) {
+            this.setAttribute("size", value);
+        }
+
+        get alt() {
+            return this.getAttribute("alt");
+        }
+
+        get title() {
+            return this.getAttribute("title");
+        }
+
+        /* DOM */
+        get image() {
+            this._image ??= this.shadowRoot.querySelector(".image");
+            return this._image;
+        }
+
+        /* Functions */
+        connectedCallback() {
+            this.setSource();
+            this.setSize();
+            this.setAltOrTitle();
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            switch(name)
+            {
+                case "source": this.setSource(); break;
+                case "size": this.setSize(); break;
+                case "alt":
+                case "title":
+                    this.setAltOrTitle(); 
+                    break;
+            }
+        }
+
+        setSource() {
+            if(this.source)
+                this.image.setAttribute("src", this.source);
+        }
+
+        setSize() {
+            const style = this.image.style;
+            const thisStyle = this.style;
+
+            style.width = this.size + "px";
+            style.height = this.size + "px";
+            
+            thisStyle.width = this.size + "px";
+            thisStyle.height = this.size + "px";
+        }
+
+        setAltOrTitle() {
+            this.image.setAttribute("alt", this.alt);
+            this.image.setAttribute("title", this.title);
+        }
+    }
+
+    customElements.define("fluent-image-icon", FluentImageIcon);
 })();
