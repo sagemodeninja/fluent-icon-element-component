@@ -1562,8 +1562,11 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
         }
 
         setSymbol() {
-            const glyph = this.glyphMap.find(map => map.name === this.symbol).glyph;
-            super.glyph = "&#x" + glyph;
+            const glyph = this.symbol
+                ? "&#x" + this.glyphMap.find(map => map.name === this.symbol).glyph
+                : "";
+
+            super.glyph = glyph;
         }
     }
 
@@ -1649,8 +1652,7 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
         }
 
         setSource() {
-            if(this.source)
-                this.image.setAttribute("src", this.source);
+            this.image.setAttribute("src", this.source);
         }
 
         setSize() {
