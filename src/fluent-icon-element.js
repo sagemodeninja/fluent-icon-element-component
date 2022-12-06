@@ -1418,8 +1418,12 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
             font-size: 16px;
             text-rendering: optimizeLegibility;
         }
+
+        .icon.use-accent {
+            color: #036ac4;
+        }
     </style>
-    <span class="icon"></span>
+    <span class="icon" part="icon"></span>
     `;
 
     class FluentFontIcon extends HTMLElement {
@@ -1431,7 +1435,7 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
         }
 
         static get observedAttributes() {
-            return ["font-family", "glyph", "font-size", "foreground"];
+            return ["font-family", "glyph", "font-size", "foreground", "use-accent"];
         }
 
         /* Attributes. */
@@ -1471,6 +1475,16 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
             this.setForeground();
         }
 
+        get useAccent() {
+            return this.hasAttribute("use-accent") 
+                   && this.getAttribute("use-accent") !== "false"
+        }
+
+        set useAccent(value) {
+            this.setAttribute("use-accent", value);
+            this.setForeground();
+        }
+
         /* DOM */
         get iconSpan() {
             this._iconSpan ??= this.shadowRoot.querySelector(".icon");
@@ -1489,7 +1503,10 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
                 case "font-family": this.setFontFamily(); break;
                 case "glyph": this.setGlyph(); break;
                 case "font-size": this.setFontSize(); break;
-                case "foreground": this.setForeground(); break;
+                case "foreground":
+                case "use-accent":
+                    this.setForeground();
+                    break;
             }
         }
 
@@ -1519,8 +1536,10 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
         }
 
         setForeground() {
+            this.iconSpan.classList.toggle("use-accent", this.useAccent);
+
             if(this.foreground !== null)
-                this.iconSpan.style.color = this.foreground; 
+                this.style.color = this.foreground; 
         }
     }
 
@@ -1530,7 +1549,7 @@ const SEGOE_FLUENT_ICONS_GLYPH_MAP = [
         }
 
         static get observedAttributes() {
-            return ["font-family", "glyph", "font-size", "foreground", "symbol"];
+            return ["font-family", "glyph", "font-size", "foreground", "use-accent", "symbol"];
         }
 
         /* Attributes. */
