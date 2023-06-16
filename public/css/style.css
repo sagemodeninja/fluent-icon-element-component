@@ -1,0 +1,9 @@
+body {
+    background-color: var(--background-fill-mica-base);
+    color: var(--fill-text-primary);
+    color-scheme: light;
+}
+
+body.dark {
+    color-scheme: dark;
+}
