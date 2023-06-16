@@ -1415,7 +1415,6 @@ export class FluentFontIcon extends CustomComponent {
         }
 
         .icon {
-            color: var(--fill-text-primary);
             display: block;
             font-size: 16px;
             text-rendering: optimizeLegibility;
