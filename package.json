@@ -1,6 +1,6 @@
 {
     "name": "@sagemodeninja/fluent-icon-element-component",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "Web component implementation of Windows 11's Icon Element.",
     "main": "dist/fluent-icon-element-component.js",
     "types": "src/@types/fluent-icon-element-component.d.ts",
